@@ -48,12 +48,14 @@ public class ApnsPayloadBuilder {
 	private Integer badgeNumber = null;
 	private String soundFileName = null;
 	private boolean contentAvailable = false;
+	private String category = null;
 
 	private static final String APS_KEY = "aps";
 	private static final String ALERT_KEY = "alert";
 	private static final String BADGE_KEY = "badge";
 	private static final String SOUND_KEY = "sound";
 	private static final String CONTENT_AVAILABLE_KEY = "content-available";
+	private static final String CATEGORY_KEY = "category";
 
 	private static final String ALERT_BODY_KEY = "body";
 	private static final String ACTION_LOC_KEY = "action-loc-key";
@@ -217,7 +219,24 @@ public class ApnsPayloadBuilder {
 		return this;
 	}
 
-	/**
+    /**
+     * <p>Sets the notification action category name, as used in iOS 8 interactive notifications. This is
+     * documented in WWDC 2014 presentation 713: What's New In iOS Notifications </p>
+     *
+     * <p>By default, no action is included in the push notification.</p>
+     *
+     * @param category the category name to send, or {@code null} to not send one
+     *
+     */
+
+    public ApnsPayloadBuilder setCategory(final String category) {
+        this.category = category;
+        return this;
+    }
+
+
+
+    /**
 	 * <p>Adds a custom property to the payload. Values are mapped to JSON types according to the mapping table at
 	 * <a href="https://code.google.com/p/json-simple/">https://code.google.com/p/json-simple/</a>.</p>
 	 *
@@ -277,6 +296,10 @@ public class ApnsPayloadBuilder {
 			if (this.contentAvailable) {
 				aps.put(CONTENT_AVAILABLE_KEY, 1);
 			}
+
+            if (this.category != null) {
+                aps.put(CATEGORY_KEY, this.category);
+            }
 
 			final Object alertObject = this.createAlertObject();
 
